@@ -1,4 +1,4 @@
-function processM3u8_ffzy(content: string, baseUrl: string) {
+function processM3u8_zy360(content: string, baseUrl: string) {
   const lines: string[] = content
     .split("\n")
     .map((line) => line.trim())
