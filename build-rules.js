@@ -1,27 +1,42 @@
 const fs = require("fs");
 const path = require("path");
 
-const rulesDir = path.join(__process.cwd(), "rules");
-const distDir = path.join(__process.cwd(), "dist");
+// 修正点：使用 process.cwd()
+const rulesDir = path.join(process.cwd(), "rules");
+const distDir = path.join(process.cwd(), "dist");
+const outputFile = path.join(distDir, "rules.json");
+
 const result = {};
 
-if (!fs.existsSync(distDir)) fs.mkdirSync(distDir);
-
-fs.readdirSync(rulesDir).forEach((file) => {
-  if (file.endsWith(".ts")) {
-    const fileName = path.parse(file).name;
-    const content = fs.readFileSync(path.join(rulesDir, file), "utf8");
-
-    // 匹配方法体：匹配第一个 '{' 到最后一个 '}' 之间的内容
-    // 这种方式适用于导出单一函数的结构
-    const match = content.match(/\{([\s\S]*)\}/);
-    if (match) {
-      result[fileName] = match[1].trim();
-    }
+try {
+  if (!fs.existsSync(rulesDir)) {
+    console.error('Error: "rules" 目录不存在');
+    process.exit(1);
   }
-});
 
-fs.writeFileSync(
-  path.join(distDir, "rules.json"),
-  JSON.stringify(result, null, 2),
-);
+  if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir, { recursive: true });
+  }
+
+  const files = fs.readdirSync(rulesDir);
+
+  files.forEach((file) => {
+    if (file.endsWith(".ts")) {
+      const key = path.parse(file).name;
+      const content = fs.readFileSync(path.join(rulesDir, file), "utf8");
+
+      // 提取第一个 { 和最后一个 } 之间的函数体
+      const bodyMatch = content.match(/\{([\s\S]*)\}/);
+      if (bodyMatch) {
+        result[key] = bodyMatch[1].trim();
+        console.log(`成功处理: ${file}`);
+      }
+    }
+  });
+
+  fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
+  console.log(`JSON 已生成至: ${outputFile}`);
+} catch (err) {
+  console.error("执行出错:", err);
+  process.exit(1);
+}
