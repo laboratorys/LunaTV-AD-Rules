@@ -1,6 +1,6 @@
-function processM3u8(blocks: string[][], baseUrl: string) {
-  const valid: string[][] = [];
-  const ads: string[] = [];
+function processM3u8(blocks, baseUrl) {
+  const valid = [];
+  const ads = [];
   blocks.forEach((block, i) => {
     const count = block.length / 2;
     if (i === 0 || count >= 8) {

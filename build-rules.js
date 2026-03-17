@@ -40,25 +40,7 @@ try {
     }
   });
 
-  // 3. 扫描目录，补充未在映射中出现的文件 (一对一)
-  const files = fs.readdirSync(rulesDir);
-  files.forEach((file) => {
-    if (file.endsWith(".ts") && file !== "config.json") {
-      const key = path.parse(file).name;
-
-      // 如果这个文件名还没有被映射占用，则自动添加
-      if (!result[key]) {
-        const content = fs.readFileSync(path.join(rulesDir, file), "utf8");
-        const bodyMatch = content.match(/\{([\s\S]*)\}/);
-        if (bodyMatch) {
-          result[key] = bodyMatch[1].trim();
-          console.log(`[自动] 发现新规则文件: ${file}`);
-        }
-      }
-    }
-  });
-
-  // 4. 写入结果
+  // 3. 写入结果
   fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
   console.log(`\n✨ JSON 已成功生成至: ${outputFile}`);
 } catch (err) {

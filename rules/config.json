@@ -1,6 +1,6 @@
 {
   "mapping": {
-    "ffzy": "common_filter.ts",
-    "zy360": "common_filter.ts"
+    "ffzy": "common_filter.js",
+    "zy360": "common_filter.js"
   }
 }
