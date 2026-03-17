@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 
-// 修正点：使用 process.cwd()
 const rulesDir = path.join(process.cwd(), "rules");
 const distDir = path.join(process.cwd(), "dist");
 const outputFile = path.join(distDir, "rules.json");
@@ -18,24 +17,50 @@ try {
     fs.mkdirSync(distDir, { recursive: true });
   }
 
-  const files = fs.readdirSync(rulesDir);
+  // 1. 加载映射配置 (如果存在)
+  const configPath = path.join(rulesDir, "config.json");
+  let mapping = {};
+  if (fs.existsSync(configPath)) {
+    const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+    mapping = config.mapping || {};
+    console.log("加载到映射配置，共", Object.keys(mapping).length, "条规则");
+  }
 
-  files.forEach((file) => {
-    if (file.endsWith(".ts")) {
-      const key = path.parse(file).name;
-      const content = fs.readFileSync(path.join(rulesDir, file), "utf8");
-
-      // 提取第一个 { 和最后一个 } 之间的函数体
+  // 2. 预先处理映射关系 (多对一)
+  Object.keys(mapping).forEach((sourceKey) => {
+    const fileName = mapping[sourceKey];
+    const filePath = path.join(rulesDir, fileName);
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, "utf8");
       const bodyMatch = content.match(/\{([\s\S]*)\}/);
       if (bodyMatch) {
-        result[key] = bodyMatch[1].trim();
-        console.log(`成功处理: ${file}`);
+        result[sourceKey] = bodyMatch[1].trim();
+        console.log(`[映射] ${sourceKey} -> 使用文件 ${fileName}`);
       }
     }
   });
 
+  // 3. 扫描目录，补充未在映射中出现的文件 (一对一)
+  const files = fs.readdirSync(rulesDir);
+  files.forEach((file) => {
+    if (file.endsWith(".ts") && file !== "config.json") {
+      const key = path.parse(file).name;
+
+      // 如果这个文件名还没有被映射占用，则自动添加
+      if (!result[key]) {
+        const content = fs.readFileSync(path.join(rulesDir, file), "utf8");
+        const bodyMatch = content.match(/\{([\s\S]*)\}/);
+        if (bodyMatch) {
+          result[key] = bodyMatch[1].trim();
+          console.log(`[自动] 发现新规则文件: ${file}`);
+        }
+      }
+    }
+  });
+
+  // 4. 写入结果
   fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
-  console.log(`JSON 已生成至: ${outputFile}`);
+  console.log(`\n✨ JSON 已成功生成至: ${outputFile}`);
 } catch (err) {
   console.error("执行出错:", err);
   process.exit(1);
