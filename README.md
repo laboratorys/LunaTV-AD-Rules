@@ -1,12 +1,20 @@
-# LunaTV-AD-Rules
+# LunaTV-Config
 
-- url1: https://raw.githubusercontent.com/laboratorys/LunaTV-AD-Rules/refs/heads/main/dist/rules.json
+- [ad_rules_raw](https://raw.githubusercontent.com/laboratorys/LunaTV-Config/refs/heads/main/dist/rules.json)
 
-- url2: https://cdn.jsdmirror.com/gh/laboratorys/LunaTV-AD-Rules@main/dist/rules.json
+- [ad_rules_jsdmirror](https://cdn.jsdmirror.com/gh/laboratorys/LunaTV-Config@main/dist/rules.json)
 
-- url3: https://cdn.jsdmirror.cn/gh/laboratorys/LunaTV-AD-Rules@main/dist/rules.json
+- [ad_rules_jsdmirror_cn](https://cdn.jsdmirror.cn/gh/laboratorys/LunaTV-Config@main/dist/rules.json)
 
-- url4: https://gcore.jsdelivr.net/gh/laboratorys/LunaTV-AD-Rules@main/dist/rules.json
+- [ad_rules_gcore](https://gcore.jsdelivr.net/gh/laboratorys/LunaTV-Config@main/dist/rules.json)
+
+- [ad_config_raw](https://raw.githubusercontent.com/laboratorys/LunaTV-Config/refs/heads/main/dist/config.txt)
+
+- [ad_config_jsdmirror](https://cdn.jsdmirror.com/gh/laboratorys/LunaTV-Config@main/dist/config.txt)
+
+- [ad_config_jsdmirror_cn](https://cdn.jsdmirror.cn/gh/laboratorys/LunaTV-Config@main/dist/config.txt)
+
+- [ad_config_gcore](https://gcore.jsdelivr.net/gh/laboratorys/LunaTV-Config@main/dist/config.txt)
 
 # 常见源
 
