@@ -5,7 +5,36 @@ const rulesDir = path.join(process.cwd(), "rules");
 const distDir = path.join(process.cwd(), "dist");
 const outputFile = path.join(distDir, "rules.json");
 
+const tvJsonPath = path.join(process.cwd(), "tv.json");
+const configTxtPath = path.join(distDir, "config.txt");
+
 const result = {};
+
+function base58Encode(buffer) {
+  const alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+  const result = [];
+
+  for (const byte of buffer) {
+    let carry = byte;
+    for (let j = 0; j < result.length; j++) {
+      const x = (result[j] << 8) + carry;
+      result[j] = x % 58;
+      carry = (x / 58) | 0;
+    }
+    while (carry > 0) {
+      result.push(carry % 58);
+      carry = (carry / 58) | 0;
+    }
+  }
+  for (let i = 0; i < buffer.length && buffer[i] === 0; i++) {
+    result.push(0);
+  }
+
+  return result
+    .reverse()
+    .map((index) => alphabet[index])
+    .join("");
+}
 
 try {
   if (!fs.existsSync(rulesDir)) {
@@ -40,9 +69,17 @@ try {
     }
   });
 
-  // 3. 写入结果
+  // 4. 写入结果
   fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
   console.log(`\n✨ JSON 已成功生成至: ${outputFile}`);
+  if (fs.existsSync(tvJsonPath)) {
+    const tvContent = fs.readFileSync(tvJsonPath); // 读取为 Buffer
+    const encoded = base58Encode(tvContent);
+    fs.writeFileSync(configTxtPath, encoded);
+    console.log(`✨ Base58 编码已生成至: ${configTxtPath}`);
+  } else {
+    console.warn(`⚠️ 未找到 ${tvJsonPath}，跳过生成 config.txt`);
+  }
 } catch (err) {
   console.error("执行出错:", err);
   process.exit(1);

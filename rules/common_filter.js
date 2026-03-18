@@ -2,8 +2,11 @@ function processM3u8(blocks, baseUrl) {
   const valid = [];
   const ads = [];
   blocks.forEach((block, i) => {
-    const count = block.length / 2;
-    if (i === 0 || count >= 8) {
+    const tsSegments = block.filter(
+      (line) => line.trim() !== "" && !line.startsWith("#"),
+    );
+    const count = tsSegments.length;
+    if (i === 0 || count >= 10) {
       valid.push(block);
     } else {
       if (ads.length > 0) ads.push("#EXT-X-DISCONTINUITY");
