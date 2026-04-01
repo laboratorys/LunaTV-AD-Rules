@@ -28,7 +28,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add dist/rules.json dist/config.txt
+          git add dist/rules.json dist/config.txt dist/config-demo.txt
           if git diff --quiet && git diff --staged --quiet; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
@@ -44,3 +44,6 @@ jobs:
           curl -i "${BASE_URL}/rules.json"
           echo -e "\n正在刷新 config.txt..."
           curl -i "${BASE_URL}/config.txt"
+          echo -e "\n正在刷新 config-demo.txt..."
+          curl -i "${BASE_URL}/config-demo.txt"
+

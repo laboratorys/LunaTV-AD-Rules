@@ -6,7 +6,9 @@ const distDir = path.join(process.cwd(), "dist");
 const outputFile = path.join(distDir, "rules.json");
 
 const tvJsonPath = path.join(process.cwd(), "tv.json");
+const tvDemoJsonPath = path.join(process.cwd(), "tv-demo.json");
 const configTxtPath = path.join(distDir, "config.txt");
+const configDemoTxtPath = path.join(distDir, "config-demo.txt");
 
 const result = {};
 
@@ -68,17 +70,24 @@ try {
       }
     }
   });
-
   // 4. 写入结果
   fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
   console.log(`\n✨ JSON 已成功生成至: ${outputFile}`);
+  if (fs.existsSync(tvDemoJsonPath)) {
+    const tvDemoContent = fs.readFileSync(tvDemoJsonPath); // 读取为 Buffer
+    const encodedDemo = base58Encode(tvDemoContent);
+    fs.writeFileSync(configDemoTxtPath, encodedDemo);
+    console.log(`✨ Base58 编码已生成至: ${configDemoTxtPath}`);
+  } else {
+    console.warn(`⚠️ 未找到 ${tvDemoJsonPath}，跳过生成 config-demo.txt`);
+  }
   if (fs.existsSync(tvJsonPath)) {
     const tvContent = fs.readFileSync(tvJsonPath); // 读取为 Buffer
     const encoded = base58Encode(tvContent);
     fs.writeFileSync(configTxtPath, encoded);
     console.log(`✨ Base58 编码已生成至: ${configTxtPath}`);
   } else {
-    console.warn(`⚠️ 未找到 ${tvJsonPath}，跳过生成 config.txt`);
+      console.warn(`⚠️ 未找到 ${tvJsonPath}，跳过生成 config.txt`);
   }
 } catch (err) {
   console.error("执行出错:", err);

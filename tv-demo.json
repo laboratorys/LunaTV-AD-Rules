@@ -1,0 +1,42 @@
+{
+  "cache_time": 7200,
+  "api_site": {
+    "dyttzy": {
+      "api": "http://caiji.dyttzyapi.com/api.php/provide/vod",
+      "name": "电影天堂",
+      "detail": "http://caiji.dyttzyapi.com"
+    },
+    "ffzy": {
+      "api": "https://api.ffzyapi.com/api.php/provide/vod",
+      "name": "非凡影视",
+      "detail": "http://ffzy5.tv"
+    },
+    "wujin": {
+      "api": "https://api.wujinapi.me/api.php/provide/vod",
+      "name": "无尽资源"
+    },
+    "ruyi": {
+      "api": "http://cj.rycjapi.com/api.php/provide/vod",
+      "name": "如意资源"
+    },
+    "dbzy": {
+      "api": "https://dbzy.tv/api.php/provide/vod",
+      "name": "豆瓣资源"
+    },
+    "lzi": {
+      "api": "https://cj.lziapi.com/api.php/provide/vod",
+      "name": "量子资源"
+    },
+    "wwzy": {
+      "api": "https://wwzy.tv/api.php/provide/vod",
+      "name": "旺旺短剧"
+    }
+  },
+  "lives": {
+    "iptv": {
+      "name": "iptv",
+      "url": "https://cdn.jsdmirror.cn/gh/best-fan/iptv-sources@main/cn_all_status.m3u8"
+    }
+  },
+  "ad_rules": "https://cdn.jsdmirror.cn/gh/laboratorys/LunaTV-AD-Rules@main/dist/rules.json"
+}
